@@ -9,7 +9,7 @@ namespace BattleshipStateTracker.Api.Models
         public string PlayerOneName { get; set; }
 
         [Required]
-        [Range(1, 10, ErrorMessage = "You need at least 1 ship to initiate a battleship game, no more than 10 per player")]
+        [Range(1, int.MaxValue, ErrorMessage = "You need at least 1 ship to initiate a battleship game")]
         public int TotalNumberOfShipsPerPlayer { get; set; }
     }
 }

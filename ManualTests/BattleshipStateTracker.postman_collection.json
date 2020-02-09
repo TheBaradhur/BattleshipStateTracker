@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "GetGameState",
+			"name": "Get Game State",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -22,6 +22,78 @@
 						"api",
 						"gamestate",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Init New Game",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"PlayerOneName\": \"Hulk\",\n\t\"TotalNumberOfShipsPerPlayer\": 2\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44322/api/gamestate/new-game",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44322",
+					"path": [
+						"api",
+						"gamestate",
+						"new-game"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Ship",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"XPosition\": 1,\n\t\"YPosition\": 3,\n\t\"Orientation\": \"up\",\n\t\"Size\": 5\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44322/api/gamestate/add-ship",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44322",
+					"path": [
+						"api",
+						"gamestate",
+						"add-ship"
 					]
 				}
 			},

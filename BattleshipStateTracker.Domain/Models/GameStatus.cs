@@ -5,6 +5,7 @@
         NoGame,
         Initiated,
         ShipSetup,
+        ShipSetupCompleted,
         Started,
         Finished
     }

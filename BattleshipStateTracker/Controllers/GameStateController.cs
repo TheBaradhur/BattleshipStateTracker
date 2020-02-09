@@ -64,10 +64,43 @@ namespace BattleshipStateTracker.Api.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult AddBattleship()
+        [HttpPost("add-ship")]
+        public IActionResult AddShip(AddShipRequest addShipRequest)
         {
-            return Ok("OK");
+            try
+            {
+                var validation = _gameStateService.ValidateAddShipRequest(
+                    addShipRequest.XPosition,
+                    addShipRequest.YPosition,
+                    addShipRequest.Orientation,
+                    addShipRequest.Size,
+                    addShipRequest.AddToPlayerOne);
+
+                if (!validation.IsValid)
+                {
+                    return BadRequest(
+                        ApiErrorResponse.GetCustomBadRequest(
+                            "One or more game rules were not respected.",
+                            HttpContext.TraceIdentifier,
+                            new List<string> { validation.Error }));
+                }
+
+                _gameStateService.AddShipOnPlayersBoard(addShipRequest.XPosition,
+                    addShipRequest.YPosition,
+                    addShipRequest.Orientation,
+                    addShipRequest.Size,
+                    addShipRequest.AddToPlayerOne);
+
+                return StatusCode(201, _gameStateService.GetGameStatus());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500,
+                    ApiErrorResponse.GetCustomInternalServerError(
+                        "An unexpected error occured. Please contact API team.",
+                        HttpContext.TraceIdentifier,
+                        new List<string> { e.Message }));
+            }
         }
 
         [HttpPost]

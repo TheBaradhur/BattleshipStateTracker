@@ -6,11 +6,11 @@ namespace BattleshipStateTracker.Domain.Models.Ships
 {
     public class Ship
     {
-        public int XTipPosition { get; set; }
+        public int XPosition { get; set; }
 
-        public int YTipPosition { get; set; }
+        public int YPosition { get; set; }
 
-        public Orientation Orientation { get; set; }
+        public Orientation ShipOrientation { get; set; }
 
         public int Size { get; set; }
 
@@ -18,11 +18,11 @@ namespace BattleshipStateTracker.Domain.Models.Ships
 
         public Dictionary<Coordinate, ShipCellState> ShipCoordinates { get; set; }
 
-        public Ship(int xTipPosition, int yTipPosition, Orientation orientation, int size)
+        public Ship(int xPosition, int yPosition, Orientation shipOrientation, int size)
         {
-            XTipPosition = xTipPosition;
-            YTipPosition = yTipPosition;
-            Orientation = orientation;
+            XPosition = xPosition;
+            YPosition = yPosition;
+            ShipOrientation = shipOrientation;
             Size = size;
 
             ShipCoordinates = GenerateNewShipCoordinates();
@@ -30,7 +30,39 @@ namespace BattleshipStateTracker.Domain.Models.Ships
 
         private Dictionary<Coordinate, ShipCellState> GenerateNewShipCoordinates()
         {
-            throw new NotImplementedException();
+            ShipCoordinates = new Dictionary<Coordinate, ShipCellState>();
+            var initialCoord = new Coordinate(XPosition, YPosition);
+
+            ShipCoordinates.Add(initialCoord, ShipCellState.Alive);
+
+            var xOtherEnd = XPosition;
+            var yOtherend = YPosition;
+
+            for (int i = 1; i < Size; i++)
+            {
+                if (ShipOrientation == Orientation.Down)
+                {
+                    xOtherEnd += 1;
+                }
+                if (ShipOrientation == Orientation.Up)
+                {
+                    xOtherEnd -= 1;
+                }
+
+                if (ShipOrientation == Orientation.Left)
+                {
+                    yOtherend -= 1;
+                }
+                if (ShipOrientation == Orientation.Right)
+                {
+                    yOtherend += 1;
+                }
+
+                var rollingCoordinate = new Coordinate(xOtherEnd, yOtherend);
+                ShipCoordinates.Add(rollingCoordinate, ShipCellState.Alive);
+            }
+
+            return ShipCoordinates;
         }
     }
 }
