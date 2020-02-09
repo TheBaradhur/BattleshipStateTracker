@@ -19,7 +19,7 @@ namespace BattleshipStateTracker.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<IGameStateService, GameStateService>();
+            services.AddSingleton<IGameStateService, GameStateService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

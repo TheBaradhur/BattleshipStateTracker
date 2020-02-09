@@ -4,6 +4,6 @@
     {
         public Player Player1 { get; set; }
 
-        public GameStatus Type { get; set; } = GameStatus.NoGame;
+        public GameStatus Status { get; set; } = GameStatus.NoGame;
     }
 }

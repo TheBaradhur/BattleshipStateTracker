@@ -4,9 +4,11 @@ namespace BattleshipStateTracker.Domain
 {
     public interface IGameStateService
     {
-        void CreateNewBoard(string player1Name, int totalNumberOfShips);
+        void InitializeNewGame(string player1Name, int totalNumberOfShips);
 
-        string GetGameState();
+        string GetGameStatus();
+
+        string GetPlayerOneName();
     }
 
     public class GameStateService : IGameStateService
@@ -22,17 +24,24 @@ namespace BattleshipStateTracker.Domain
             _gameState = new GameState();
         }
 
-        public string GetGameState()
+        public string GetGameStatus()
         {
-            return _gameState.Type.ToString();
+            return _gameState.Status.ToString();
         }
 
-        public void CreateNewBoard(string player1Name, int totalNumberOfShips)
+        public void InitializeNewGame(string player1Name, int totalNumberOfShips)
         {
             _gameState.Player1 = new Player(player1Name)
             {
                 PlayerBoard = new Board(VerticalBoardSize, HorizontalBoardSize, totalNumberOfShips)
             };
+
+            _gameState.Status = GameStatus.Initiated;
+        }
+
+        public string GetPlayerOneName()
+        {
+            return _gameState.Player1?.Name;
         }
     }
 }
