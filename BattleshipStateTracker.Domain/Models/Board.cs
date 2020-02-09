@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using BattleshipStateTracker.Domain.Models.Ships;
+﻿using BattleshipStateTracker.Domain.Models.Ships;
+using System.Collections.Generic;
 
 namespace BattleshipStateTracker.Domain.Models
 {
@@ -22,6 +22,7 @@ namespace BattleshipStateTracker.Domain.Models
             TotalNumberOfShips = totalNumberOfShips;
 
             Ships = new List<Ship>();
+            AttacksReceivedHistory = new List<Coordinate>();
         }
     }
 }

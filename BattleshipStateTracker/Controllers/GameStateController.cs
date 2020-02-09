@@ -44,7 +44,7 @@ namespace BattleshipStateTracker.Api.Controllers
         }
 
         [HttpPost("new-game")]
-        public IActionResult NewGame(NewGameRequest newGameRequest)
+        public IActionResult NewGame([FromBody] NewGameRequest newGameRequest)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace BattleshipStateTracker.Api.Controllers
         }
 
         [HttpPost("add-ship")]
-        public IActionResult AddShip(AddShipRequest addShipRequest)
+        public IActionResult AddShip([FromBody] AddShipRequest addShipRequest)
         {
             try
             {
@@ -103,10 +103,40 @@ namespace BattleshipStateTracker.Api.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult AttackPosition()
+        [HttpPost("attack")]
+        public IActionResult Attack([FromBody] AttackRequest attackRequest)
         {
-            return Ok("OK");
+            try
+            {
+                var validation = _gameStateService.ValidateAttackPosition(
+                    attackRequest.XAttackCoordinate,
+                    attackRequest.YAttackCoordinate,
+                    attackRequest.TargetedUser);
+
+                if (!validation.IsValid)
+                {
+                    return BadRequest(
+                        ApiErrorResponse.GetCustomBadRequest(
+                            "One or more game rules were not respected.",
+                            HttpContext.TraceIdentifier,
+                            new List<string> { validation.Error }));
+                }
+
+                var attackOutcome = _gameStateService.AttackPlayersPosition(
+                    attackRequest.XAttackCoordinate,
+                    attackRequest.YAttackCoordinate,
+                    attackRequest.TargetedUser);
+
+                return Ok(attackOutcome);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500,
+                    ApiErrorResponse.GetCustomInternalServerError(
+                        "An unexpected error occured. Please contact API team.",
+                        HttpContext.TraceIdentifier,
+                        new List<string> { e.Message }));
+            }
         }
     }
 }

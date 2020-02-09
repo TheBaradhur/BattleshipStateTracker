@@ -14,7 +14,7 @@ namespace BattleshipStateTracker.Domain.Models.Ships
 
         public int Size { get; set; }
 
-        public bool IsSunk => ShipCoordinates.Values.All(value => value != ShipCellState.Alive);
+        public bool IsSunk => ShipCoordinates.Values.All(value => value == ShipCellState.Shot);
 
         public Dictionary<Coordinate, ShipCellState> ShipCoordinates { get; set; }
 

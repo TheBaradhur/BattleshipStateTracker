@@ -6,7 +6,7 @@
         Initiated,
         ShipSetup,
         ShipSetupCompleted,
-        Started,
+        OnGoing,
         Finished
     }
 }

@@ -98,6 +98,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Attack Position",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"XAttackCoordinate\": 2,\n\t\"YAttackCoordinate\": 1,\n\t\"TargetedUser\": 1\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44322/api/gamestate/attack",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44322",
+					"path": [
+						"api",
+						"gamestate",
+						"attack"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}

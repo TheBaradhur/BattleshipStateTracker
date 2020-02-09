@@ -8,6 +8,10 @@ namespace BattleshipStateTracker.Domain.UnitTests
     {
         private readonly Fixture _fixture;
 
+        private const string MissText = "Attack missed...";
+
+        private const string HitText = "Attack hit!!!";
+
         public GameStateServiceTests()
         {
             _fixture = new Fixture();
@@ -172,6 +176,143 @@ namespace BattleshipStateTracker.Domain.UnitTests
 
             // Assert
             actual.Should().Be("ShipSetupCompleted");
+        }
+
+        [Fact]
+        public void ValidateAttackPosition_ShouldReturnInitError_WhenGameIsNotInitialized()
+        {
+            // Arrange
+            var target = new GameStateService();
+            var x = _fixture.Create<int>();
+            var y = _fixture.Create<int>();
+
+            // Act
+            var actual = target.ValidateAttackPosition(x, y, 1);
+
+            // Assert
+            actual.ErrorCode.Should().Be("GameNotInitialized");
+        }
+
+        [Fact]
+        public void ValidateAttackPosition_ShouldReturnShipsSetupIncomplete_WhenShipsTotalCountIsNotReached()
+        {
+            // Arrange
+            var target = new GameStateService();
+            var playerName = _fixture.Create<string>();
+            var nbOfShips = 2;
+            target.InitializeNewGame(playerName, nbOfShips);
+
+            var x = 1;
+            var y = 1;
+            var orientation = "right";
+            var size = 2;
+
+            target.AddShipOnPlayersBoard(x, y, orientation, size, true);
+
+            // Act
+            var actual = target.ValidateAttackPosition(x, y, 1);
+
+            // Assert
+            actual.ErrorCode.Should().Be("ShipsSetupIncomplete");
+        }
+
+        [Fact]
+        public void ValidateAttackPosition_ShouldReturnGameFinished_WhenAttackingAfterGameEnded()
+        {
+            // Arrange
+            var target = new GameStateService();
+            var playerName = _fixture.Create<string>();
+            var nbOfShips = 1;
+            target.InitializeNewGame(playerName, nbOfShips);
+
+            var x = 1;
+            var y = 1;
+            var orientation = "right";
+            var size = 2;
+
+            target.AddShipOnPlayersBoard(x, y, orientation, size, true);
+
+            target.AttackPlayersPosition(x, y, 1);
+            target.AttackPlayersPosition(x, y + 1, 1);
+
+            // Act
+            var actual = target.ValidateAttackPosition(x, y, 1);
+
+            // Assert
+            actual.ErrorCode.Should().Be("GameFinished");
+        }
+
+        [Fact]
+        public void AttackPlayersPosition_ShouldReturnHitText_WhenAShipIsHit()
+        {
+            // Arrange
+            var target = new GameStateService();
+            var playerName = _fixture.Create<string>();
+            var nbOfShips = 1;
+            target.InitializeNewGame(playerName, nbOfShips);
+
+            var x = 1;
+            var y = 1;
+            var orientation = "right";
+            var size = 2;
+
+            target.AddShipOnPlayersBoard(x, y, orientation, size, true);
+
+            // Act
+            var actual = target.AttackPlayersPosition(x, y, 1);
+
+            // Assert
+            actual.Should().Be(HitText);
+        }
+
+        [Fact]
+        public void AttackPlayersPosition_ShouldReturnMissText_WheAttackMiss()
+        {
+            // Arrange
+            var target = new GameStateService();
+            var playerName = _fixture.Create<string>();
+            var nbOfShips = 1;
+            target.InitializeNewGame(playerName, nbOfShips);
+
+            var x = 1;
+            var y = 1;
+            var orientation = "right";
+            var size = 2;
+            var missX = x + 1;
+            var missY = y + 1;
+
+            target.AddShipOnPlayersBoard(x, y, orientation, size, true);
+
+            // Act
+            var actual = target.AttackPlayersPosition(missX, missY, 1);
+
+            // Assert
+            actual.Should().Be(MissText);
+        }
+
+        [Fact]
+        public void GetGameStatus_ShouldReturnGameFinished_WhenAllShipsOfAPlayerAreDestroyed()
+        {
+            // Arrange
+            var target = new GameStateService();
+            var playerName = _fixture.Create<string>();
+            var nbOfShips = 1;
+            target.InitializeNewGame(playerName, nbOfShips);
+
+            var x = 1;
+            var y = 1;
+            var orientation = "right";
+            var size = 2;
+
+            target.AddShipOnPlayersBoard(x, y, orientation, size, true);
+            target.AttackPlayersPosition(x, y, 1);
+            target.AttackPlayersPosition(x, y + 1, 1);
+
+            // Act
+            var actual = target.GetGameStatus();
+
+            // Assert
+            actual.Should().Be("Finished");
         }
     }
 }
