@@ -1,0 +1,32 @@
+{
+	"info": {
+		"_postman_id": "a3e9e664-94c0-4f27-9c9e-d1919fa56ff2",
+		"name": "BattleshipStateTracker",
+		"description": "Set of endpoints for manually testing the BattleshipStateTracker service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetGameState",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44322/api/gamestate/",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44322",
+					"path": [
+						"api",
+						"gamestate",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
